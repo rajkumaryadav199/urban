@@ -15,12 +15,13 @@ app.use(cors());
 
 app.use(express.urlencoded({extended:false}))
 
-app.use("/api/v1",require("./routers/productRoute"))
+app.use("/api/products",require("./routers/productRoute"))
 app.use("/api/users",require("./routers/userRoute"))
 app.use("/api/cart",require("./routers/cartRoute"))
+app.use("/api/home",require("./routers/homeRoute") )
 
 
  app.use(errorHandler)
  
 
-app.listen(port,() => console.log(`server start${port}`))
+app.listen(port,() => console.log(`server start ${port}`))

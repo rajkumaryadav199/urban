@@ -1,13 +1,30 @@
-const asyncHandler = require('express-async-handler')
-const Product = require("../models/productModel")
+const express=require("express")
+const asyncHandler=require('express-async-handler')
 
-//get
-const getProduct =  asyncHandler (async (req,res) =>{
-  
-    const products = await Product.find()
-    res.status(200).json(products)
-} )
+const HomeData  =require("../models/homeModel")
 
+// get data for home page
+const HomeProductController=asyncHandler(async(req, res)=>{
+    
+    const homedata = await HomeData.find()
+    res.status(200).json(homedata)
+})
+
+// post data for home page
+const HomeAdd=asyncHandler(
+    async(req, res)=>{
+    console.log(req)
+    if(!req.body)
+    {
+        res.status(400)
+        throw new Error( "Add the data")
+    }
+    const data=await HomeData.create(req.body)
+    res.status(200).json({status:'ok', data:data})
+
+}
+)
+/*
 //post
 const setProduct = asyncHandler (
     async (req, res)=>{
@@ -52,11 +69,5 @@ const deleteProduct = async (req, res)=>{
      await product.remove()
     res.status(200).json({id: req.params.id})
 
-}
-
-module.exports={
-    getProduct,
-    setProduct,
-    updateProduct,
-    deleteProduct
-}
+}*/
+module.exports={HomeProductController , HomeAdd}

@@ -7,6 +7,7 @@ const registerUser = asyncHandler( async(req,res) =>{
   const {firstName,lastName,email,password} = req.body
 
   if(!firstName || !lastName || !email || !password) {
+    
     res.status(400)
     throw new Error('plz add all fields')
   }
@@ -50,20 +51,33 @@ const registerUser = asyncHandler( async(req,res) =>{
 
 
 const loginUser = asyncHandler(async(req,res) =>{
-
   const {email,password}= req.body
-
+// we will chech the user is exist  or not
   const user= await User.findOne({email})
+ 
+  // If user is not found then we threw the error
+  if(!user)
+  {
+    res.status(404)
+       throw new Error ("Try with other email or password")
+  }
 
-  if(user &&(await bcrypt.compare(password,user.password))){
+  // if user is exist then we will matches the password 
+    const match=bcrypt.compare(password,user.password)
+  // if(user &&(await bcrypt.compare(password,user.password)))
+  if(match)
+  {
+   
     res.json({
-      _id:user.id,
+      _id:user.id, 
       firstName:user.firstName,
       lastName:user.lastName,
       email: user.email,
       token:generateToken(user._id)
     })
   }
+
+
   else{
     res.status(400)
     throw new Error('Invalid creadentials')
@@ -76,7 +90,7 @@ const loginUser = asyncHandler(async(req,res) =>{
 
 const generateToken =(id)=>{
   return jwt.sign({id}, process.env.JWT_SECRET, {
-    expiresIn:"30d",
+    expiresIn:"300s",
   })
 }
 // const getmeUser = async(req,res) =>{
