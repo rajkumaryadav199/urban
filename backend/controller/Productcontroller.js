@@ -1,13 +1,20 @@
 const asyncHandler = require('express-async-handler')
 const Product = require("../models/productModel")
-
+const ApiFeatures=require("../Utils/apiFeatures")
 //get
 const getProduct =  asyncHandler (async (req,res) =>{
   
     const products = await Product.find()
     res.status(200).json(products)
 } )
+ 
+// get one data route
 
+const getOneProduct =  asyncHandler (async (req,res) =>{
+  
+    const products = await Product.findById(req.params.id)
+    res.status(200).json(products)
+} )
 //post
 const setProduct = asyncHandler (
     async (req, res)=>{
@@ -54,7 +61,27 @@ const deleteProduct = async (req, res)=>{
 
 }
 
+const getAllProducts=asyncHandler(
+   async (req, res)=>{
+// pagination concept
+    const perpage=20;
+const productCount = await Product.countDocuments();
+const apiFeatures=new ApiFeatures(Product.find(), req.query)
+.search()
+.filter()
+// .pagination(perpage)
+const products= await apiFeatures.query;
+console.log("pdt:", products)
+res.status(200).json({
+    success:true,
+     products
+    })
+    }
+)
+
 module.exports={
+    getAllProducts,
+    getOneProduct,
     getProduct,
     setProduct,
     updateProduct,

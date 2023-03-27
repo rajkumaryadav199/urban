@@ -9,7 +9,7 @@ const  HomeDataScheema= mongoose.Schema({
     price: { type:  Number, required: true },
     color:{type:String, require:true},
     size:{type:String, required:true},
-
+    
 },
   {
      versionKey: false,

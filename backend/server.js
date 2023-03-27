@@ -15,10 +15,11 @@ app.use(cors());
 
 app.use(express.urlencoded({extended:false}))
 
-app.use("/api/products",require("./routers/productRoute"))
+app.use("/api",require("./routers/productRoute"))
 app.use("/api/users",require("./routers/userRoute"))
 app.use("/api/cart",require("./routers/cartRoute"))
 app.use("/api/home",require("./routers/homeRoute") )
+app.use("/api/tshirt", require("./routers/tShirtRoute"))
 
 
  app.use(errorHandler)
